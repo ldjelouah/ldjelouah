@@ -4,9 +4,8 @@ on:
     branches:
       - init-readme
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: "0 */12 * * *" # 2x per day
   workflow_dispatch:
-
 
 jobs:
   metrics:
@@ -21,12 +20,16 @@ jobs:
           base: ""
           config_timezone: Europe/Paris
 
-          # --- Langages, récemment utilisés ---
+          # Include repos from your org as well
+          repositories_affiliations: owner,collaborator,organization_member
+
+          # --- Languages ---
           plugin_languages: yes
           plugin_languages_sections: most-used, recently-used
           plugin_languages_recent: yes
-          plugin_languages_recent_days: 30   # fenêtre “récemment” (7/14/30…)
+          plugin_languages_recent_days: 90
           plugin_languages_limit: 8
           plugin_languages_details: percentage
-          # Optionnel : ignorer certains langages
+          plugin_languages_threshold: 0
+          # Optional: ignore some languages
           # plugin_languages_ignored: html, css
