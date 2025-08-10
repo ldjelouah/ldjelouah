@@ -1,4 +1,4 @@
-name: Metrics (languages – full)
+name: Metrics (languages – all)
 on:
   push:
     branches: [init-readme]
@@ -15,33 +15,34 @@ jobs:
           user: ldjelouah
           token: ${{ secrets.METRICS_TOKEN }}
 
-          # Output / look
+          # Rend le SVG + un en-tête propre
           template: classic
           filename: metrics-languages.svg
           base: header
           config_timezone: Europe/Paris
           config_order: languages
           config_display: large
-          config_padding: 20%
 
-          # Make sure private org repos are included
+          # Inclure dépôts privés/org (nécessite PAT: repo + read:org et SSO autorisé)
           repositories_affiliations: owner,collaborator,organization_member
           repositories_forks: no
 
-          # LANGUAGES
+          # ---- Langages : montrer "tout" ----
           plugin_languages: yes
           plugin_languages_sections: most-used, recently-used
           plugin_languages_recent: yes
-          plugin_languages_recent_days: 365      # 1-year window
-          plugin_languages_recent_categories: programming, markup, data
-          plugin_languages_categories: programming, markup, data
-          plugin_languages_limit: 20
-          plugin_languages_threshold: 0
+          plugin_languages_recent_days: 365        # 1 an
+          plugin_languages_limit: 50               # monte la limite
+          plugin_languages_threshold: 0            # pas de filtrage
           plugin_languages_details: lines,bytes-size,percentage
           plugin_languages_colors: github
 
-          # Do a deeper analysis (helps surface HCL/Terraform)
+          # Inclure catégories souvent masquées (ex. HCL/Terraform → data)
+          plugin_languages_categories: programming, markup, data, prose
+          plugin_languages_recent_categories: programming, markup, data, prose
+
+          # Analyse approfondie pour mieux détecter les langages minoritaires
           plugin_languages_indepth: yes
-          plugin_languages_analysis_timeout: 20
-          plugin_languages_analysis_timeout_repositories: 20
-          plugin_languages_recent_load: 300
+          plugin_languages_analysis_timeout: 25
+          plugin_languages_analysis_timeout_repositories: 25
+          plugin_languages_recent_load: 400
