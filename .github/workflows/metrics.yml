@@ -1,8 +1,12 @@
 name: Metrics (languages recent)
 on:
+  push:
+    branches:
+      - init-readme
   schedule:
-    - cron: "0 */12 * * *"   # 2x par jour
+    - cron: "0 */12 * * *"
   workflow_dispatch:
+
 
 jobs:
   metrics:
