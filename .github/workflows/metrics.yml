@@ -1,10 +1,9 @@
-name: Metrics (languages full profile)
+name: Metrics (languages – full)
 on:
   push:
-    branches:
-      - init-readme
+    branches: [init-readme]
   schedule:
-    - cron: "0 */12 * * *" # Met à jour 2x par jour
+    - cron: "0 */12 * * *"
   workflow_dispatch:
 
 jobs:
@@ -13,42 +12,36 @@ jobs:
     steps:
       - uses: lowlighter/metrics@latest
         with:
-          # Profil GitHub
           user: ldjelouah
           token: ${{ secrets.METRICS_TOKEN }}
 
-          # Fichier généré
+          # Output / look
           template: classic
           filename: metrics-languages.svg
-
-          # Conserver un en-tête (header)
           base: header
           config_timezone: Europe/Paris
-
-          # Inclure tous les dépôts (même privés/orgas)
-          repositories_affiliations: owner,collaborator,organization_member
-          repositories_forks: no
-
-          # --- Plugin Langages ---
-          plugin_languages: yes
-          plugin_languages_sections: most-used, recently-used
-          plugin_languages_recent: yes
-          plugin_languages_recent_days: 365  # Historique d’1 an
-          plugin_languages_limit: 20         # Affiche jusqu'à 20 langages
-          plugin_languages_threshold: 0%     # Pas de filtrage
-          plugin_languages_details: lines,bytes-size,percentage
-          plugin_languages_colors: github
-          plugin_languages_categories: programming, markup, data
-          plugin_languages_recent_categories: programming, markup, data
-
-          # Renommer certains langages pour plus de clarté
-          plugin_languages_aliases: |
-            Terraform: HCL (Terraform)
-            Makefile: GNU Makefile
-            Dockerfile: Docker
-            Shell: Bash/Shell
-
-          # Style du SVG
           config_order: languages
           config_display: large
           config_padding: 20%
+
+          # Make sure private org repos are included
+          repositories_affiliations: owner,collaborator,organization_member
+          repositories_forks: no
+
+          # LANGUAGES
+          plugin_languages: yes
+          plugin_languages_sections: most-used, recently-used
+          plugin_languages_recent: yes
+          plugin_languages_recent_days: 365      # 1-year window
+          plugin_languages_recent_categories: programming, markup, data
+          plugin_languages_categories: programming, markup, data
+          plugin_languages_limit: 20
+          plugin_languages_threshold: 0
+          plugin_languages_details: lines,bytes-size,percentage
+          plugin_languages_colors: github
+
+          # Do a deeper analysis (helps surface HCL/Terraform)
+          plugin_languages_indepth: yes
+          plugin_languages_analysis_timeout: 20
+          plugin_languages_analysis_timeout_repositories: 20
+          plugin_languages_recent_load: 300
